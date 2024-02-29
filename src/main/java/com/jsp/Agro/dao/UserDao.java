@@ -29,7 +29,7 @@ public class UserDao {
 	}
 	
 //2	FetchByEmail
-	public User login(String email) {
+	public User fetchByEmail(String email) {
 		Optional<User> db = repo.fetchByEmail(email);
 		if(db.isPresent())
 			return db.get();

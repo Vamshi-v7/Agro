@@ -1,5 +1,6 @@
 package com.jsp.Agro.service;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class UserService {
 			
 			try {
 			SimpleMailMessage mailMessage=new SimpleMailMessage();
+			int oTP = generateOTP();
 			
 			mailMessage.setFrom("pitlavamshikrishna1502@gamil.com");
 			mailMessage.setTo(user.getEmail());
@@ -47,7 +49,7 @@ public class UserService {
 					+ "Welcome to Our Agro Application! We are thrilled to have you on board and are excited about the journey ahead. Your registration is complete, and you are now a valued member of our community.\r\n"
 					+ "\r\n"
 					+ "Here at our Agro Application, we are committed to revolutionizing the way you experience agriculture. Whether you are a seasoned farmer, a hobbyist gardener, or someone passionate about sustainable living, our platform offers a range of tools and resources to support your agricultural endeavors.");
-			mailMessage.setSubject("Welcome to Our Agro Application");
+			mailMessage.setSubject("Welcome to Our Agro Application(Team-3)");
 			javaSender.send(mailMessage);
 			
 			}catch(Exception e) {
@@ -59,7 +61,7 @@ public class UserService {
 //2.	Login
 	public ResponseEntity<ResponseStructure<User>> login(String email,String password){
 		ResponseStructure<User> rs=new ResponseStructure<>();
-		User db = dao.login(email);
+		User db = dao.fetchByEmail(email);
 		if(db!=null) {
 			if(password.equals(db.getPassword()))
 			{
@@ -138,20 +140,41 @@ public class UserService {
 	
 //	Forgot Password
 	public ResponseEntity<ResponseStructure<String>> forgotPass(String email,String password,String confirm){
-		if(password.equals(confirm)) {
-		ResponseStructure<String> rs=new ResponseStructure<>();
-		User db = dao.modifyUser(email, password);
-		if(db!=null) {
-			rs.setStatus(HttpStatus.ACCEPTED.value());
-			rs.setMsg("Password Updated");
-			rs.setData("Password Updated Successfully for email: "+email);
+		
+		
+		if(password.equals(confirm)) 
+		{
+			User dbMail = dao.fetchByEmail(email);
+			if(dbMail!=null) {
+				 int otp=generateOTP();
+				 
+				 SimpleMailMessage message=new SimpleMailMessage();
+				 	message.setFrom("pitlavamshikrishna1502@gamil.com");
+				 	message.setTo(email);
+				 	message.setSubject("Authenticating The User!");
+				 	message.setText("Dear "+dbMail.getFirstName()+",\nYou have generated an action to Update Your Password ! If Not Report.\n\nOTP : "+otp+"   is an OTP to update Your Password. "
+				 			+ "Please Enter the OTP to proceed and Do not share it with anyone. \n\nWish you the best!\n\n"
+				 			+ "Regars\nTeam Agro\nAgro India 	PVT LTD.");
 			
-			return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.ACCEPTED);
+				 	javaSender.send(message);
+				 	
+				 	dbMail.setPassword(password);
+				 	ResponseStructure<String> rs=new ResponseStructure<>();
+//				 	User db = dao.modifyUser(email, password);
+				 	User db = dao.updateUser(dbMail);
+		
+				 	if(db!=null) {
+				 		rs.setStatus(HttpStatus.ACCEPTED.value());
+				 		rs.setMsg("Password Updated");
+				 		rs.setData("Password Updated Successfully for email: "+email);
+			
+				 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.ACCEPTED);
+				 	}
+				 	
+			}
+			throw new UserNotFoundException("User NOT Found With Email: "+email); 
 		}
-		throw new UserNotFoundException("User NOT Found With Email: "+email);
-	  }
-	  throw new PasswordIncorrectException("New Password: "+password+" And Confirm Password: "+confirm+" Both are not equal");
+		throw new PasswordIncorrectException("New Password: "+password+" And Confirm Password: "+confirm+" Both are not equal");
 	}
-
 
 }
