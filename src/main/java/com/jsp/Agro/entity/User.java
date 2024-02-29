@@ -2,6 +2,7 @@ package com.jsp.Agro.entity;
 
 import com.jsp.Agro.enums.UserType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class User {
 	private int age;
 	private UserType type;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
 
 }
