@@ -1,5 +1,9 @@
 package com.jsp.Agro.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +14,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.jsp.Agro.entity.Image;
 import com.jsp.Agro.entity.User;
 import com.jsp.Agro.service.UserService;
 import com.jsp.Agro.util.ResponseStructure;
@@ -21,6 +28,8 @@ public class UserController {
 
 	@Autowired
 	UserService service;
+	
+	public static String UserDir=System.getProperty("user.dir")+"/src/main/resources/images";
 	
 	@PostMapping("/register")
 	public ResponseEntity<ResponseStructure<User>> register(@RequestBody User user){
@@ -55,7 +64,21 @@ public class UserController {
 	@PatchMapping("/forgot")
 	public ResponseEntity<ResponseStructure<String>> forgotPass(String email,String password,String confirm){
 			return service.forgotPass(email, password,confirm);
-		
 	}
+	
+	@PutMapping("/updateImage")
+	public ResponseEntity<ResponseStructure<User>> updateUserImage(@RequestParam("id")int id, @RequestParam("image") MultipartFile file) throws IOException{
+		User user=new User();
+		Image img=new Image();
+			img.setName(file.getOriginalFilename());
+			img.setImgData(file.getBytes());
+			
+			Path filenameAndPath = Paths.get(UserDir, file.getOriginalFilename());
+			Files.write(filenameAndPath, file.getBytes());
+		user.setImage(img);
+		user.setId(id);
+		return service.updateUser(user);
+	}
+	
 	
 }

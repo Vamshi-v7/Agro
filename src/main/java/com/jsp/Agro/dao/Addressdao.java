@@ -45,8 +45,8 @@ public class Addressdao {
 					uad.setMandal(ad.getMandal());
 				if(ad.getDistrict()!=null)
 					uad.setDistrict(ad.getDistrict());
-				if(ad.getPinCODE()!=0)
-					uad.setPinCODE(ad.getPinCODE());
+				if(ad.getPinCode()!=0)
+					uad.setPinCode(ad.getPinCode());
 				if(ad.getState()!=null)
 					uad.setState(ad.getState());
 				

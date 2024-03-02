@@ -1,13 +1,16 @@
 package com.jsp.Agro.service;
 
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.jsp.Agro.dao.UserDao;
@@ -16,6 +19,8 @@ import com.jsp.Agro.exceptions.EmailExistsException;
 import com.jsp.Agro.exceptions.PasswordIncorrectException;
 import com.jsp.Agro.exceptions.UserNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class UserService {
@@ -36,20 +41,25 @@ public class UserService {
 			rs.setData(db);
 			
 			try {
-			SimpleMailMessage mailMessage=new SimpleMailMessage();
-			int oTP = generateOTP();
+			MimeMessage mailMessage=javaSender.createMimeMessage();
+			MimeMessageHelper helper=new MimeMessageHelper(mailMessage, true);
 			
-			mailMessage.setFrom("pitlavamshikrishna1502@gamil.com");
-			mailMessage.setTo(user.getEmail());
-			mailMessage.setText("\r\n"
-					+ "Subject: Welcome to Our Agro Application\r\n"
+			helper.setFrom("pitlavamshikrishna1502@gamil.com");
+			helper.setTo(user.getEmail());
+			helper.setText("\r\n"
+					+ "Subject: Welcome to Agro Application\r\n"
 					+ "\r\n"
 					+ "Dear "+user.getFirstName()+"\r\n"
 					+ "\r\n"
-					+ "Welcome to Our Agro Application! We are thrilled to have you on board and are excited about the journey ahead. Your registration is complete, and you are now a valued member of our community.\r\n"
+					+ "Welcome to Agro Application! We are thrilled to have you on board and are excited about the journey ahead. Your registration is complete, and you are now a valued member of our community.\r\n"
 					+ "\r\n"
-					+ "Here at our Agro Application, we are committed to revolutionizing the way you experience agriculture. Whether you are a seasoned farmer, a hobbyist gardener, or someone passionate about sustainable living, our platform offers a range of tools and resources to support your agricultural endeavors.");
-			mailMessage.setSubject("Welcome to Our Agro Application(Team-3)");
+					+ "Here at our Agro Application, we are committed to revolutionizing the way you experience agriculture. Whether you are a seasoned farmer, a hobbyist gardener, or someone passionate about sustainable living, our platform offers a range of tools and resources to support your agricultural endeavors."
+					+ "\n\n\n\nThanks & regards,\nAgro Resource pvt.Ltd\nMail-Us : agroprojectbatch3@gmail.com\n\n");
+			helper.setSubject("Welcome to Our Agrow Application(Team-3)");
+			
+			FileSystemResource file = new FileSystemResource(new File("C:/Users/Parsha Bharath Kumar/Downloads/Agro/Agro/src/main/resources/images/agro image.jpg"));
+			helper.addAttachment(file.getFilename(), file);
+			
 			javaSender.send(mailMessage);
 			
 			}catch(Exception e) {

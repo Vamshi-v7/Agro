@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.jsp.Agro.entity.Address;
+import com.jsp.Agro.entity.Post;
 import com.jsp.Agro.entity.User;
 import com.jsp.Agro.repo.UserRepo;
 
@@ -46,11 +48,11 @@ public class UserDao {
 	
 //4	UpdateById 
 	public User updateUser(User user) {
-		Optional<User> db = repo.findById(user.getId());
+		Optional<User> opt = repo.findById(user.getId());
 		
-		if(db.isPresent())
+		if(opt.isPresent())
 		{
-			User udb = db.get();
+			User udb = opt.get();
 			
 			if(user.getFirstName()!=null)
 				udb.setFirstName(user.getFirstName());
@@ -62,14 +64,49 @@ public class UserDao {
 				udb.setPhone(user.getPhone());
 			if(user.getPassword()!=null)
 				udb.setPassword(user.getPassword());
-			if(user.getAddress()!=null)
-				udb.setAddress(user.getAddress());
+			if(user.getAddress()!=null) {
+				Address addr = user.getAddress();
+				Address dbAddr = udb.getAddress();
+					if(addr.getHouse()!=null)
+						dbAddr.setHouse(addr.getHouse());
+					if(addr.getLandMark()!=null)
+						dbAddr.setLandMark(addr.getLandMark());
+					if(addr.getStreet()!=null)
+						dbAddr.setStreet(addr.getStreet());
+					if(addr.getMandal()!=null)
+						dbAddr.setMandal(addr.getMandal());
+					if(addr.getDistrict()!=null)
+						dbAddr.setDistrict(addr.getDistrict());
+					if(addr.getPinCode()!=0)
+						dbAddr.setPinCode(addr.getPinCode());
+					if(addr.getState()!=null)
+						dbAddr.setState(addr.getState());
+				udb.setAddress(dbAddr);
+			}
 			if(user.getAge()!=0)
 				udb.setAge(user.getAge());
 			if(user.getType()!=null)
 				udb.setType(user.getType());
 			if(user.getGender()!=null)
 				udb.setGender(user.getGender());
+			if(user.getPost()!=null) {
+				
+				List<Post> post = user.getPost();
+				List<Post> dbPost = udb.getPost();
+				
+				for (Post p : post) {
+					Post p1=new Post();
+					if(p.getLocation()!=null)
+						p1.setLocation(p.getLocation());
+					if(p.getCaption()!=null)
+						p1.setCaption(p.getCaption());
+					dbPost.add(p1);
+				}
+				
+				udb.setPost(dbPost);
+			}
+			if(user.getImage()!=null)
+				udb.setImage(user.getImage());
 			
 			return repo.save(udb);
 		}
