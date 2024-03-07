@@ -16,10 +16,8 @@ public class ImageDao {
 	
 //	To SAVE The Image
 	public Image saveImage(Image image) {
-		Optional<Image> db = repo.findByName(image.getName());
-		if(db.isEmpty())
+		
 			return repo.save(image);
-		return null;
 	}
 	
 //	To Update The Image the Existing Image

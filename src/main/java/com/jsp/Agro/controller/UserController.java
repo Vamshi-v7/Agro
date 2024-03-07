@@ -75,6 +75,7 @@ public class UserController {
 			
 			Path filenameAndPath = Paths.get(UserDir, file.getOriginalFilename());
 			Files.write(filenameAndPath, file.getBytes());
+			
 		user.setImage(img);
 		user.setId(id);
 		return service.updateUser(user);

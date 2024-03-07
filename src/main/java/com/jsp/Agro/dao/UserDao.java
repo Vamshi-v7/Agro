@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jsp.Agro.entity.Address;
-import com.jsp.Agro.entity.Post;
+import com.jsp.Agro.entity.Image;
+//import com.jsp.Agro.entity.Post;
 import com.jsp.Agro.entity.User;
 import com.jsp.Agro.repo.UserRepo;
 
@@ -65,8 +66,8 @@ public class UserDao {
 			if(user.getPassword()!=null)
 				udb.setPassword(user.getPassword());
 			if(user.getAddress()!=null) {
-				Address addr = user.getAddress();
-				Address dbAddr = udb.getAddress();
+				Address addr = user.getAddress(); //User Given
+				Address dbAddr = udb.getAddress(); //existing
 					if(addr.getHouse()!=null)
 						dbAddr.setHouse(addr.getHouse());
 					if(addr.getLandMark()!=null)
@@ -89,22 +90,22 @@ public class UserDao {
 				udb.setType(user.getType());
 			if(user.getGender()!=null)
 				udb.setGender(user.getGender());
-			if(user.getPost()!=null) {
-				
-				List<Post> post = user.getPost();
-				List<Post> dbPost = udb.getPost();
-				
-				for (Post p : post) {
-					Post p1=new Post();
-					if(p.getLocation()!=null)
-						p1.setLocation(p.getLocation());
-					if(p.getCaption()!=null)
-						p1.setCaption(p.getCaption());
-					dbPost.add(p1);
-				}
-				
-				udb.setPost(dbPost);
-			}
+//			if(user.getPost()!=null) {
+//				
+//				List<Post> post = user.getPost();
+//				List<Post> dbPost = udb.getPost();
+//				
+//				for (Post p : post) {
+//					Post p1=new Post();
+//					if(p.getLocation()!=null)
+//						p1.setLocation(p.getLocation());
+//					if(p.getCaption()!=null)
+//						p1.setCaption(p.getCaption());
+//					dbPost.add(p1);
+//				}
+//				
+//				udb.setPost(dbPost);
+//			}
 			if(user.getImage()!=null)
 				udb.setImage(user.getImage());
 			
@@ -148,5 +149,14 @@ public class UserDao {
 		List<User> db = repo.findAll();
 		return db; 
 	}
+	
+//9	FetchByEmail
+	public User fetchByImage(Image img) {
+		Optional<User> db = repo.fetchByImage(img);
+		if(db.isPresent())
+			return db.get();
+		return null;
+	}	
+	
 	
 }
