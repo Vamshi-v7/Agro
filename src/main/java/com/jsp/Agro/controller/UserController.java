@@ -33,6 +33,7 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<ResponseStructure<User>> register(@RequestBody User user){
+		System.out.println(user);
 		return service.register(user);
 	}
 	

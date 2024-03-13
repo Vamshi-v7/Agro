@@ -1,7 +1,7 @@
 package com.jsp.Agro.entity;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+//import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -37,5 +37,5 @@ public class Post {
 	private String caption;
 	private String location;
 	
-	static DateTimeFormatter format=DateTimeFormatter.ofPattern("dd-MM-YYYY HH:MM:SS");
+//	static DateTimeFormatter format=DateTimeFormatter.ofPattern("dd-MM-YYYY HH:MM:SS");
 }

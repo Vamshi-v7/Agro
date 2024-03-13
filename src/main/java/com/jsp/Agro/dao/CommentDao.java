@@ -1,5 +1,6 @@
 package com.jsp.Agro.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,15 @@ public class CommentDao {
 		Optional<Comment> opt = repo.findById(id);
 		if(opt.isPresent()) {
 			return opt.get();
+		}
+		return null;
+	}
+	
+//	To GET The Comment
+	public List<Comment> fetchAll() {
+		 List<Comment> list = repo.findAll();
+		if(list.size()!=0) {
+			return list;
 		}
 		return null;
 	}

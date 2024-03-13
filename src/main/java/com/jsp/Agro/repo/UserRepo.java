@@ -17,5 +17,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 	
 	@Query("select e from User e where image=?1")
 	public Optional<User> fetchByImage(Image img);
+	
 
 }
