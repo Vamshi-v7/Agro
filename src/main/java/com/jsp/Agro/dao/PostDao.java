@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.jsp.Agro.entity.Comment;
 import com.jsp.Agro.entity.Post;
 import com.jsp.Agro.repo.PostRepo;
 
