@@ -93,5 +93,37 @@ public class EquipmentService {
 		}
 		throw new UserNotFoundException("No Equipments Found");
 	}
+	
+	public ResponseEntity<ResponseStructure<Equipment>> updateEquipment(Equipment equipment){
+		ResponseStructure<Equipment> rs=new ResponseStructure<>();
+		Equipment db = eDao.upadte(equipment);
+		if(db!=null) {
+			
+			rs.setStatus(HttpStatus.CREATED.value());
+			rs.setMsg("Equipment updated Successfully...!");
+			rs.setData(db);
+			
+			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
+		}
+		throw new UserNotFoundException("No Equipments Found");
+	}
+	
+	public ResponseEntity<ResponseStructure<Equipment>> deleteEquipment(int id){
+		ResponseStructure<Equipment> rs=new ResponseStructure<>();
+		Equipment db = eDao.fetchById(id);
+		if(db!=null) {
+			
+			if(db.getUser()!=null) {
+				db.setUser(null);
+				eDao.upadte(db);
+			}
+			rs.setStatus(HttpStatus.CREATED.value());
+			rs.setMsg("Equipment Deleted Successfully...!");
+			rs.setData(eDao.delete(db));
+			
+			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
+		}
+		throw new UserNotFoundException("No Equipment Found with ID:"+id);
+	}
 
 }

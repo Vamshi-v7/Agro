@@ -37,5 +37,28 @@ public class EquipmentDao {
 		return repo.findAll();
 	}
 	
+	public Equipment  upadte(Equipment equipment) {
+		Optional<Equipment> opt = repo.findById(equipment.getId());
+		if(opt.isPresent()){
+			Equipment db = opt.get();
+			if(equipment.getName()!=null)
+				db.setName(equipment.getName());
+			if(equipment.getCostPHour()!=0)
+				db.setCostPHour(equipment.getCostPHour());
+			if(equipment.getQuantity()!=0)
+				db.setQuantity(equipment.getQuantity());
+			if(equipment.getUser()!=null)
+				db.setUser(equipment.getUser());
+
+			return repo.save(db);
+		}
+		return null;
+	}
+	
+	public Equipment  delete(Equipment equipment) {
+			repo.delete(equipment);
+			return equipment;
+	}
+	
 	
 }
