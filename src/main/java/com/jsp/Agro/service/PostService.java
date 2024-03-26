@@ -11,7 +11,7 @@ import com.jsp.Agro.dao.PostDao;
 import com.jsp.Agro.dao.UserDao;
 import com.jsp.Agro.entity.Post;
 import com.jsp.Agro.entity.User;
-import com.jsp.Agro.exceptions.UserNotFoundException;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 @Service
@@ -40,7 +40,7 @@ public class PostService {
 			
 			return new ResponseEntity<ResponseStructure<Post>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("User Doesn't Exist with ID: "+id);
+		throw new IdNotFoundException("User Doesn't Exist with ID: "+id);
 	}
 	
 	public ResponseEntity<ResponseStructure<Post>> fetchPost(int id){
@@ -55,7 +55,7 @@ public class PostService {
 			
 			return new ResponseEntity<ResponseStructure<Post>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("Post Doesn't Exist with ID: "+id);
+		throw new IdNotFoundException("Post Doesn't Exist with ID: "+id);
 	}
 	
 	public ResponseEntity<ResponseStructure<Post>> deleteUserPost(int id,int uid){
@@ -82,10 +82,10 @@ public class PostService {
 				}
 
 			}
-			throw new UserNotFoundException("Post Doesn't Exist with ID: "+id);
+			throw new IdNotFoundException("Post Doesn't Exist with ID: "+id);
 		}
 	
-		throw new UserNotFoundException("User Doesn't Exist with ID: "+id);
+		throw new IdNotFoundException("User Doesn't Exist with ID: "+id);
 	}
 	
 	public ResponseEntity<ResponseStructure<Post>> deletePost(int id){
@@ -106,7 +106,7 @@ public class PostService {
 				}
 			}
 		}
-		throw new UserNotFoundException("Post Doesn't Exist with ID: "+id);
+		throw new IdNotFoundException("Post Doesn't Exist with ID: "+id);
 	}
 
 }

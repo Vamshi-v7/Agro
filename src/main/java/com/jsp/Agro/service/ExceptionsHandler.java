@@ -18,11 +18,11 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jsp.Agro.exceptions.EmailExistsException;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.exceptions.ImageAlreadyExist;
 import com.jsp.Agro.exceptions.ImageNotFound;
 import com.jsp.Agro.exceptions.PasswordIncorrectException;
 import com.jsp.Agro.exceptions.PostNotFoundException;
-import com.jsp.Agro.exceptions.UserNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 import jakarta.validation.ConstraintViolation;
@@ -40,8 +40,8 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 		
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.BAD_REQUEST);
 	}
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<ResponseStructure<String>> userNotFound(UserNotFoundException e){
+	@ExceptionHandler(IdNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> userNotFound(IdNotFoundException e){
 		ResponseStructure<String> rs=new ResponseStructure<>();
 		rs.setStatus(HttpStatus.NOT_FOUND.value());
 		rs.setMsg("User doesn't Exists");
@@ -60,12 +60,12 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-	public ResponseEntity<ResponseStructure<String>> sQLIntegrity(PasswordIncorrectException e){
+	public ResponseEntity<ResponseStructure<String>> sQLIntegrity(SQLIntegrityConstraintViolationException e){
 		
 		ResponseStructure<String> rs=new ResponseStructure<>();
 		rs.setStatus(HttpStatus.BAD_REQUEST.value());
-		rs.setMsg("SqL I");
-		rs.setData(e.getMsg());
+		rs.setMsg("SqL Intigrity");
+		rs.setData("Recort Already Exists With Given ID...:)");
 		
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.BAD_REQUEST);
 	}

@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserNotFoundException extends RuntimeException {
+public class IdNotFoundException extends RuntimeException {
    private String msg="User Not Found";
 }

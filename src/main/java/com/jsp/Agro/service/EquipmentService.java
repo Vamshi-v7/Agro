@@ -11,7 +11,7 @@ import com.jsp.Agro.dao.EquipmentDao;
 import com.jsp.Agro.dao.UserDao;
 import com.jsp.Agro.entity.Equipment;
 import com.jsp.Agro.entity.User;
-import com.jsp.Agro.exceptions.UserNotFoundException;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 @Service
@@ -36,7 +36,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("User Not Exist with ID:"+uID);
+		throw new IdNotFoundException("User Not Exist with ID:"+uID);
 	}
 	public ResponseEntity<ResponseStructure<Equipment>> fetchById(int id){
 		ResponseStructure<Equipment> rs=new ResponseStructure<>();
@@ -49,7 +49,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("User Not Exist with ID:"+id);
+		throw new IdNotFoundException("User Not Exist with ID:"+id);
 	}
 	public ResponseEntity<ResponseStructure<List<Equipment>>> fetchByName (String name){
 		ResponseStructure<List<Equipment>> rs=new ResponseStructure<>();
@@ -62,7 +62,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<List<Equipment>>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("No Equipments Found with name :"+name);
+		throw new IdNotFoundException("No Equipments Found with name :"+name);
 	}
 	public ResponseEntity<ResponseStructure<List<Equipment>>> fetchByUser(int uID){
 		ResponseStructure<List<Equipment>> rs=new ResponseStructure<>();
@@ -77,7 +77,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<List<Equipment>>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("User Not Exist with ID:"+uID);
+		throw new IdNotFoundException("User Not Exist with ID:"+uID);
 	}
 	
 	public ResponseEntity<ResponseStructure<List<Equipment>>> fetchAll(){
@@ -91,7 +91,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<List<Equipment>>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("No Equipments Found");
+		throw new IdNotFoundException("No Equipments Found");
 	}
 	
 	public ResponseEntity<ResponseStructure<Equipment>> updateEquipment(Equipment equipment){
@@ -105,7 +105,7 @@ public class EquipmentService {
 			
 			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("No Equipments Found");
+		throw new IdNotFoundException("No Equipments Found");
 	}
 	
 	public ResponseEntity<ResponseStructure<Equipment>> deleteEquipment(int id){
@@ -113,17 +113,13 @@ public class EquipmentService {
 		Equipment db = eDao.fetchById(id);
 		if(db!=null) {
 			
-			if(db.getUser()!=null) {
-				db.setUser(null);
-				eDao.upadte(db);
-			}
 			rs.setStatus(HttpStatus.CREATED.value());
 			rs.setMsg("Equipment Deleted Successfully...!");
 			rs.setData(eDao.delete(db));
 			
 			return new ResponseEntity<ResponseStructure<Equipment>>(rs,HttpStatus.CREATED);
 		}
-		throw new UserNotFoundException("No Equipment Found with ID:"+id);
+		throw new IdNotFoundException("No Equipment Found with ID:"+id);
 	}
 
 }

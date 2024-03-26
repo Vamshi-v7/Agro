@@ -13,8 +13,8 @@ import com.jsp.Agro.dao.UserDao;
 import com.jsp.Agro.entity.Comment;
 import com.jsp.Agro.entity.Post;
 import com.jsp.Agro.entity.User;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.exceptions.PostNotFoundException;
-import com.jsp.Agro.exceptions.UserNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 @Service
@@ -52,7 +52,7 @@ public class CommentService {
 				return new ResponseEntity<ResponseStructure<Comment>>(rs,HttpStatus.CREATED);
 				
 			}
-			throw new UserNotFoundException("User Doesn't Exist With ID :"+uId);
+			throw new IdNotFoundException("User Doesn't Exist With ID :"+uId);
 		}
 		throw new PostNotFoundException("Post Doesn't Exist With ID: "+ pId);
 	}

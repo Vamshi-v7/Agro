@@ -1,6 +1,5 @@
 package com.jsp.Agro.service;
 
-
 import java.io.File;
 import java.util.List;
 
@@ -16,8 +15,8 @@ import org.springframework.stereotype.Service;
 import com.jsp.Agro.dao.UserDao;
 import com.jsp.Agro.entity.User;
 import com.jsp.Agro.exceptions.EmailExistsException;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.exceptions.PasswordIncorrectException;
-import com.jsp.Agro.exceptions.UserNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 import jakarta.mail.internet.MimeMessage;
@@ -84,7 +83,7 @@ public class UserService {
 				throw new PasswordIncorrectException("Incorrect Password For Email:"+email);
 			}
 		}else {
-			throw new UserNotFoundException("User Not Found With The Email:"+email);
+			throw new IdNotFoundException("User Not Found With The Email:"+email);
 		}
 	}
 //3.	Fetch User
@@ -97,7 +96,7 @@ public class UserService {
 			rs.setData(db);
 			return new ResponseEntity<ResponseStructure<User>>(rs,HttpStatus.OK);
 		}
-		throw new UserNotFoundException("User Not Found For id:"+id);
+		throw new IdNotFoundException("User Not Found For id:"+id);
 	}
 	
 //4.	FetchAll
@@ -111,7 +110,7 @@ public class UserService {
 			rs.setData(db);
 			return new ResponseEntity<ResponseStructure<List<User>>>(rs,HttpStatus.OK);
 		}
-		throw new UserNotFoundException("No Users Found");
+		throw new IdNotFoundException("No Users Found");
 		
 	}
 	
@@ -125,7 +124,7 @@ public class UserService {
 			rs.setData(db);
 			return new ResponseEntity<ResponseStructure<User>>(rs,HttpStatus.OK);
 		}
-		throw new UserNotFoundException("User Not Found For id:"+user.getId());
+		throw new IdNotFoundException("User Not Found For id:"+user.getId());
 	}
 	
 //6.	Delete User
@@ -138,7 +137,7 @@ public class UserService {
 			rs.setData(db);
 			return new ResponseEntity<ResponseStructure<User>>(rs,HttpStatus.OK);
 		}
-		throw new UserNotFoundException("User Not Found For id:"+id);
+		throw new IdNotFoundException("User Not Found For id:"+id);
 	}
 	
 //7.	OTP Generator
@@ -151,38 +150,34 @@ public class UserService {
 //	Forgot Password
 	public ResponseEntity<ResponseStructure<String>> forgotPass(String email,String password,String confirm){
 		
-		
 		if(password.equals(confirm)) 
 		{
-			User dbMail = dao.fetchByEmail(email);
-			if(dbMail!=null) {
+			User dbUser = dao.fetchByEmail(email);
+			if(dbUser!=null) {
 				 int otp=generateOTP();
 				 
 				 SimpleMailMessage message=new SimpleMailMessage();
 				 	message.setFrom("pitlavamshikrishna1502@gamil.com");
 				 	message.setTo(email);
 				 	message.setSubject("Authenticating The User!");
-				 	message.setText("Dear "+dbMail.getFirstName()+",\nYou have generated an action to Update Your Password ! If Not Report.\n\nOTP : "+otp+"   is an OTP to update Your Password. "
+				 	message.setText("Dear "+dbUser.getFirstName()+",\nYou have generated an action to Update Your Password ! If Not Report.\n\nOTP : ["+otp+"]   is an OTP to update Your Password. "
 				 			+ "Please Enter the OTP to proceed and Do not share it with anyone. \n\nWish you the best!\n\n"
-				 			+ "Regars\nTeam Agro\nAgro India 	PVT LTD.");
+				 			+ "Regars\nTeam Agro\nAgro India PVT LTD.");
 			
 				 	javaSender.send(message);
 				 	
-				 	dbMail.setPassword(password);
+				 	dbUser.setPassword(password);
 				 	ResponseStructure<String> rs=new ResponseStructure<>();
 //				 	User db = dao.modifyUser(email, password);
-				 	User db = dao.updateUser(dbMail);
+				 	User db = dao.updateUser(dbUser);
 		
-				 	if(db!=null) {
 				 		rs.setStatus(HttpStatus.ACCEPTED.value());
 				 		rs.setMsg("Password Updated");
-				 		rs.setData("Password Updated Successfully for email: "+email);
+				 		rs.setData("Password Updated Successfully for email: "+db);
 			
-				 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.ACCEPTED);
-				 	}
-				 	
+				 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.ACCEPTED);			 	
 			}
-			throw new UserNotFoundException("User NOT Found With Email: "+email); 
+			throw new IdNotFoundException("User NOT Found With Email: "+email +" Please Register..!"); 
 		}
 		throw new PasswordIncorrectException("New Password: "+password+" And Confirm Password: "+confirm+" Both are not equal");
 	}

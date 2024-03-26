@@ -14,8 +14,8 @@ import com.jsp.Agro.dao.ImageDao;
 import com.jsp.Agro.dao.UserDao;
 import com.jsp.Agro.entity.Image;
 import com.jsp.Agro.entity.User;
+import com.jsp.Agro.exceptions.IdNotFoundException;
 import com.jsp.Agro.exceptions.ImageNotFound;
-import com.jsp.Agro.exceptions.UserNotFoundException;
 import com.jsp.Agro.util.ResponseStructure;
 
 @Service
@@ -59,7 +59,7 @@ public class ImageService {
 				return new ResponseEntity<ResponseStructure<Image>>(rs,HttpStatus.CREATED);
 			}
 		}
-		throw new UserNotFoundException("User Doesn't Exist with given Id : "+id);
+		throw new IdNotFoundException("User Doesn't Exist with given Id : "+id);
 	}
 	
 	public ResponseEntity<byte[]> fetchImage(int id){

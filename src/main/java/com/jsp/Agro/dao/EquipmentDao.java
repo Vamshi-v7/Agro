@@ -14,29 +14,30 @@ import com.jsp.Agro.repo.EquipmentRepo;
 public class EquipmentDao {
 	@Autowired
 	EquipmentRepo repo;
-	
+//	Save Equipment
 	public Equipment save(Equipment equipment) {
 		return repo.save(equipment);
 	}
-	
+//	Fetch By ID
 	public Equipment fetchById(int id) {
 		Optional<Equipment> opt = repo.findById(id);
 		if(opt.isPresent())
 			return opt.get();
 		return null;
 	}
-	
+//	Fetch By Equipment NAME
 	public List<Equipment>  fetchByName(String name) {
 		 return repo.findByName(name);
 	}
+//	Fetch Equipments By USER
 	public List<Equipment>  fetchByUser(User user) {
 		return repo.findByUser(user);
 	}
-	
+//	Fetch ALL EQUIPMENTS
 	public List<Equipment>  fetchAll() {
 		return repo.findAll();
 	}
-	
+//	UPDATE Equipment
 	public Equipment  upadte(Equipment equipment) {
 		Optional<Equipment> opt = repo.findById(equipment.getId());
 		if(opt.isPresent()){
@@ -54,7 +55,7 @@ public class EquipmentDao {
 		}
 		return null;
 	}
-	
+//	DELETE Equipment
 	public Equipment  delete(Equipment equipment) {
 			repo.delete(equipment);
 			return equipment;
